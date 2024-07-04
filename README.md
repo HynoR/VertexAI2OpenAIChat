@@ -2,7 +2,7 @@
 VertexAI2OpenAIChat
 
 
-配置 config.yaml 然后启动
+从GCP下载服务密钥保存到运行目录，配置 config.yaml 然后启动
 
 ```yaml
 location: "us-central1" # GCP地区
@@ -13,6 +13,8 @@ listenaddr: ":8881" # 监听地址
 
 
 ```
+
+默认运行后，监听 http://0.0.0.0:8111 ,可调用 /v1/chat/completions 路径进行非流和流对话。暂时还未开发图片上传功能。
 
 ### 服务密钥下载方法：
 
@@ -39,7 +41,7 @@ google/gemini-1.5-flash
 google/gemini-1.5-pro
 
 
-claude 模型
+claude 模型 (开通后需要注意谷歌是否给你分配配额，光开通，没绑卡升级，配额为0依旧不可用)
 
 publishers/anthropic/models/claude-3-5-sonnet
 
