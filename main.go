@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"os"
@@ -56,9 +55,7 @@ func GetProjectId(filepath string) string {
 func main() {
 	ConfigInstance = ReadConfig()
 
-	ctx := context.Background()
-	v := NewVertexInstance(GetProjectId(ConfigInstance.KeyFile), ConfigInstance.Location, ConfigInstance.KeyFile).VerTexAuth(ctx)
-	VertexIns = *v
+	InitVertexInstance(GetProjectId(ConfigInstance.KeyFile), ConfigInstance.Location, ConfigInstance.KeyFile)
 	r := NewRouter()
 	r.Run(ConfigInstance.ListenAddr)
 

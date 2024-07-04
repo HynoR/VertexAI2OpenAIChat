@@ -21,24 +21,21 @@ type VertexClient struct {
 	client    *genai.Client
 }
 
-func NewVertexInstance(projectID, location, keyFile string) *VertexClient {
+func InitVertexInstance(projectID, location, keyFile string) error {
 	slog.Info("NewVertexInstance", slog.Any("projectID", projectID), slog.Any("location", location), slog.Any("keyFile", keyFile))
-	return &VertexClient{
+	var v = &VertexClient{
 		ProjectID: projectID,
 		Location:  location,
 		KeyFile:   keyFile,
 	}
-}
-
-func (v *VertexClient) VerTexAuth(ctx context.Context) *VertexClient {
-	opt := option.WithCredentialsFile(v.KeyFile)
-	c, err := genai.NewClient(ctx, v.ProjectID, v.Location, opt)
+	opt := option.WithCredentialsFile(keyFile)
+	c, err := genai.NewClient(context.Background(), v.ProjectID, v.Location, opt)
 	if err != nil {
-		fmt.Printf("error creating client: %v", err)
-		return nil
+		return err
 	}
 	v.client = c
-	return v
+	VertexIns = *v
+	return nil
 }
 
 type OpenAIChatCompletion struct {
