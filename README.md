@@ -7,7 +7,6 @@ VertexAI2OpenAIChat
 ```yaml
 location: "us-central1" # GCP地区
 keyfile: "xx-xx-xxx-xxxx.json" # Google Cloud Service Key文件名称，放在运行目录下
-projectid: "xx-xxx-xxxxx" # 项目ID
 authkey: "xxxxxxxxxxxxx" # 转换后的接口请求头部的Bearer Key,对接聊天面板的Key
 listenaddr: ":8881" # 监听地址
 
