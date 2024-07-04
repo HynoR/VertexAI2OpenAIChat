@@ -6,6 +6,18 @@ import (
 	"log/slog"
 )
 
+var ModelConvertMap map[string]string
+
+func init() {
+	ModelConvertMap = make(map[string]string)
+	ModelConvertMap["gemini-1.5-flash"] = "gemini-1.5-flash-001"
+	ModelConvertMap["gemini-1.5-pro"] = "gemini-1.5-pro-001"
+	ModelConvertMap["claude-3-5-sonnet-20240620"] = "publishers/anthropic/models/claude-3-5-sonnet"
+	ModelConvertMap["claude-3-opus-20240229"] = "publishers/anthropic/models/claude-3-opus"
+	ModelConvertMap["claude-3-haiku-20240307"] = "publishers/anthropic/models/claude-3-haiku"
+	ModelConvertMap["claude-3-sonnet-20240229"] = "publishers/anthropic/models/claude-3-sonnet"
+}
+
 func NewRouter() *gin.Engine {
 	r := gin.Default()
 
@@ -47,6 +59,9 @@ func OpenAIRequest(c *gin.Context) {
 		return
 	}
 	slog.Any("chatCompletion", chatCompletion)
+	if covertModel, ok := ModelConvertMap[chatCompletion.Model]; ok {
+		chatCompletion.Model = covertModel
+	}
 	model := VertexIns.client.GenerativeModel(chatCompletion.Model)
 
 	err = OpenAI2VerTexAI(c, chatCompletion, model)
