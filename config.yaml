@@ -1,5 +1,4 @@
 location: "asia-east1" # GCP地区
 keyfile: "gcp-key.json" # Google Cloud Service Key文件
-projectid: "big-rat-114514" # 项目ID
 authkey: "1145141919810" # 接口/v1/chat/completions 中请求头部的Bearer Key
 listenaddr: ":8881" # 监听地址

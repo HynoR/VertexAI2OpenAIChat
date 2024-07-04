@@ -48,6 +48,7 @@ func OpenAIRequest(c *gin.Context) {
 	}
 	slog.Any("chatCompletion", chatCompletion)
 	model := VertexIns.client.GenerativeModel(chatCompletion.Model)
+
 	err = OpenAI2VerTexAI(c, chatCompletion, model)
 	if err != nil {
 		c.JSON(500, gin.H{

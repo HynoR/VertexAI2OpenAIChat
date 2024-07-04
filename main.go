@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"gopkg.in/yaml.v2"
 	"os"
 )
@@ -11,7 +12,6 @@ var ConfigInstance Config
 type Config struct {
 	Location   string `json:"location" yaml:"location"`
 	KeyFile    string `json:"keyfile" yaml:"keyfile"`
-	ProjectID  string `json:"projectid" yaml:"projectid"`
 	AuthKey    string `json:"authkey" yaml:"authkey"`
 	ListenAddr string `json:"listenaddr" yaml:"listenaddr"`
 }
@@ -29,11 +29,35 @@ func ReadConfig() Config {
 	return yamlConfig
 }
 
+type KeyCredit struct {
+	Type                    string `json:"type"`
+	ProjectId               string `json:"project_id"`
+	PrivateKeyId            string `json:"private_key_id"`
+	PrivateKey              string `json:"private_key"`
+	ClientEmail             string `json:"client_email"`
+	ClientId                string `json:"client_id"`
+	AuthUri                 string `json:"auth_uri"`
+	TokenUri                string `json:"token_uri"`
+	AuthProviderX509CertUrl string `json:"auth_provider_x509_cert_url"`
+	ClientX509CertUrl       string `json:"client_x509_cert_url"`
+	UniverseDomain          string `json:"universe_domain"`
+}
+
+func GetProjectId(filepath string) string {
+	content, err := os.ReadFile(filepath)
+	var k KeyCredit
+	err = json.Unmarshal(content, &k)
+	if err != nil {
+		panic(err)
+	}
+	return k.ProjectId
+}
+
 func main() {
 	ConfigInstance = ReadConfig()
 
 	ctx := context.Background()
-	v := NewVertexInstance(ConfigInstance.ProjectID, ConfigInstance.Location, ConfigInstance.KeyFile).VerTexAuth(ctx)
+	v := NewVertexInstance(GetProjectId(ConfigInstance.KeyFile), ConfigInstance.Location, ConfigInstance.KeyFile).VerTexAuth(ctx)
 	VertexIns = *v
 	r := NewRouter()
 	r.Run(ConfigInstance.ListenAddr)
